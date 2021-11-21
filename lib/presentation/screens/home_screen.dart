@@ -9,6 +9,7 @@ import 'package:nutri_app/presentation/constants.dart';
 import 'package:nutri_app/presentation/routes/router.gr.dart';
 import 'package:nutri_app/presentation/screens/image_preview_screen.dart';
 import 'package:nutri_app/presentation/screens/test_api.dart';
+import 'package:nutri_app/presentation/screens/test_detection.dart';
 import 'package:nutri_app/presentation/widgets/custom_bg_painter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -160,7 +161,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             // Navigator.push(
                             //     context,
                             //     MaterialPageRoute(
-                            //         builder: (context) => TestApi()));
+                            //         builder: (context) => TestDetection(
+                            //               pickedImage: pickedImage,
+                            //             )));
                           }
                         },
                         child: MediaButton(

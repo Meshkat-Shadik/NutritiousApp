@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:nutri_app/infrastructure/model/failure.dart';
 import 'package:nutri_app/infrastructure/model/nutrition_data.dart';
+import 'package:nutri_app/infrastructure/model/nutrition_data_v2.dart';
 
 abstract class BaseNutritionRepository {
   Future<NutritionData> getNutritionData(String name);

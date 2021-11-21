@@ -9,10 +9,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nutri_app/infrastructure/model/nutrition_data.dart';
 import 'package:nutri_app/presentation/constants.dart';
 import 'package:nutri_app/presentation/widgets/custom_bottom_painter.dart';
+import 'package:nutri_app/presentation/widgets/scanner_widget.dart';
 import 'package:nutri_app/providers.dart';
 import 'package:tflite/tflite.dart';
-
-import 'package:http/http.dart' as http;
 
 class ImagePreviewScreen extends ConsumerStatefulWidget {
   ImagePreviewScreen({
@@ -28,9 +27,11 @@ class ImagePreviewScreen extends ConsumerStatefulWidget {
   _ImagePreviewScreenState createState() => _ImagePreviewScreenState();
 }
 
-class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen> {
+class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen>
+    with SingleTickerProviderStateMixin {
   bool isLoading = false;
   bool isImageLoaded = false;
+  bool showMainButton = true;
   List? _result;
   String? _topConfidence = "";
   String _topName = "";
@@ -38,10 +39,37 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen> {
   String _secondName = "";
   Map<String, dynamic>? data;
 
+  AnimationController? _animationController;
+  bool _animationStopped = false;
+  bool scanning = false;
+
+  double? sugar;
+  double? fiber;
+  double? size;
+  double? sodium;
+  String? name;
+  double? potassium;
+  double? fatSaturated;
+  double? fatTotal;
+  double? calories;
+  double? cholesterol;
+  double? protein;
+  double? carbohydrate;
+
   @override
   void initState() {
     loadModel();
     checkFruit();
+    _animationController = new AnimationController(
+        duration: new Duration(seconds: 1), vsync: this);
+
+    _animationController!.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        animateScanAnimation(true);
+      } else if (status == AnimationStatus.dismissed) {
+        animateScanAnimation(false);
+      }
+    });
     super.initState();
   }
 
@@ -73,6 +101,10 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen> {
       _topConfidence = _result != null
           ? (_result?[0]['confidence'] * 100.0).toString().substring(0, 2) + "%"
           : "";
+      if (_topName == 'Sweet Potato') {
+        _topName = '';
+        _topConfidence = '';
+      }
       print(_result);
       print(_topName);
       print(_topConfidence);
@@ -81,36 +113,27 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen> {
       _secondConfidence = _result != null
           ? (_result?[1]['confidence'] * 100).toString().substring(0, 2) + "%"
           : "";
+      if (_secondName == 'Sweet Potato') {
+        _secondName = '';
+        _secondConfidence = '';
+      }
       print(_secondName);
       print(_secondConfidence);
     });
   }
 
-  showAlertDialog(BuildContext context) {
-    // Create button
-    Widget okButton = TextButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
+  void animateScanAnimation(bool reverse) {
+    if (reverse) {
+      _animationController!.reverse(from: 1.0);
+    } else {
+      _animationController!.forward(from: 0.0);
+    }
+  }
 
-    // Create AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Simple Alert"),
-      content: Text("This is an alert message."),
-      actions: [
-        okButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
+  @override
+  void dispose() {
+    _animationController!.dispose();
+    super.dispose();
   }
 
   @override
@@ -119,7 +142,9 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen> {
     double width = MediaQuery.of(context).size.width;
 
     final nutritionData = ref.watch(nutritionStateNotifierProvider);
-    // print(nutritionData);
+
+    final btnState = ref.watch(buttonStateProvider);
+    print(btnState);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -131,20 +156,40 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen> {
             SizedBox(height: 10),
             Container(
               child: isImageLoaded
-                  ? Container(
-                      height: height / 2,
-                      width: width,
-                      decoration: BoxDecoration(
-                        // borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: FileImage(
-                            File(
-                              widget.pickedImage!.path,
+                  ? Stack(
+                      children: [
+                        Container(
+                          height: height / 2,
+                          width: width,
+                          decoration: BoxDecoration(
+                            // borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: FileImage(
+                                File(
+                                  widget.pickedImage!.path,
+                                ),
+                              ),
+                              fit: BoxFit.contain,
                             ),
                           ),
-                          fit: BoxFit.contain,
                         ),
-                      ),
+                        nutritionData.maybeWhen(
+                          orElse: () => Container(),
+                          loading: () => ScannerAnimation(
+                            _animationStopped,
+                            width - 30,
+                            animation:
+                                _animationController as AnimationController,
+                          ),
+                        ),
+                        // Container(
+                        //   height: height / 2,
+                        //   width: width,
+                        //   decoration: BoxDecoration(
+                        //     color: Colors.red,
+                        //   ),
+                        // ),
+                      ],
                     )
                   : Container(
                       height: height / 2,
@@ -189,18 +234,33 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       nutritionData.maybeWhen(
-                        loading: () => Column(
-                          children: [
-                            Text("Loading..."),
-                            SizedBox(height: 10),
-                            NeumorphicProgressIndeterminate(
-                              style: ProgressStyle(
-                                accent: Colors.green,
-                                variant: Colors.lime,
+                        loading: () {
+                          if (!scanning) {
+                            animateScanAnimation(false);
+                            setState(() {
+                              _animationStopped = false;
+                              scanning = true;
+                            });
+                          } else {
+                            setState(() {
+                              _animationController!.forward();
+                              _animationStopped = true;
+                              scanning = false;
+                            });
+                          }
+                          return Column(
+                            children: [
+                              Text("Loading..."),
+                              SizedBox(height: 10),
+                              NeumorphicProgressIndeterminate(
+                                style: ProgressStyle(
+                                  accent: Colors.green,
+                                  variant: Colors.lime,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          );
+                        },
                         orElse: () => Container(),
                       ),
                       SizedBox(height: 0),
@@ -214,39 +274,105 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen> {
                             primary: Colors.green[200],
                             shape: StadiumBorder(),
                             padding: const EdgeInsets.all(15.0)),
-                        child: GestureDetector(
-                          child: Text(
-                            'See Nutrition Value',
-                            style: GoogleFonts.breeSerif(
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
+                        child: Text(
+                          nutritionData.maybeWhen(
+                            initial: () => 'Scan Nutrition Data',
+                            loading: () => 'Loading',
+                            success: (d) {
+                              sugar = d.items!.single.sugarG;
+                              fiber = d.items!.single.fiberG;
+                              size = d.items!.single.servingSizeG;
+                              sodium = d.items!.single.sodiumMg;
+                              name = d.items!.single.name;
+                              fatSaturated = d.items!.single.fatSaturatedG;
+                              fatTotal = d.items!.single.fatTotalG;
+                              calories = d.items!.single.calories;
+                              cholesterol = d.items!.single.cholesterolMg;
+                              protein = d.items!.single.proteinG;
+                              carbohydrate =
+                                  d.items!.single.carbohydratesTotalG;
+                              potassium = d.items!.single.potassiumMg;
+
+                              return 'Press View Button To See';
+                            },
+                            orElse: () => 'Scan Nutrition Data',
+                          ),
+                          style: GoogleFonts.breeSerif(
+                            fontSize: 18,
+                            color: Colors.black,
                           ),
                         ),
                       ),
                       nutritionData.maybeWhen(
                         orElse: () => Container(),
-                        success: (d) => ElevatedButton(
+                        success: (d) {
+                          _animationController!.stop();
+                          return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green[200],
+                              shape: StadiumBorder(),
+                              padding: const EdgeInsets.all(15.0),
+                            ),
                             onPressed: () {
+                              ref.read(buttonStateProvider.state).state = false;
                               nutritionData.maybeWhen(
                                   orElse: () => Container(),
                                   loading: () => Container(),
-                                  success: (d) => showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            nutritionData.maybeMap(
-                                              success: (d) => d
-                                                  .nutritionData.items!.single
-                                                  .toString(),
-                                              orElse: () => '',
+                                  success: (d) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            content: SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                  Text('Name: $name'),
+                                                  Text(
+                                                      'Size: ${size!.toString()} g'),
+                                                  Text(
+                                                      'Calories: ${calories!.toString()} g'),
+                                                  Text(
+                                                      'Protein: ${protein!.toString()} g'),
+                                                  Text(
+                                                      'Carbohydrate: ${carbohydrate!.toString()} g'),
+                                                  Text(
+                                                      'Fiber: ${fiber!.toString()} g'),
+                                                  Text(
+                                                      'Cholesterol: ${cholesterol!.toString()} mg'),
+                                                  Text(
+                                                      'Fat Saturated: ${fatSaturated!.toString()} g'),
+                                                  Text(
+                                                      'Fat Total: ${fatTotal!.toString()} g'),
+                                                  Text(
+                                                      'Sodium: ${sodium!.toString()} mg'),
+                                                  Text(
+                                                      'Potassium: ${cholesterol!.toString()} Mg'),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      }));
+                                          );
+                                        });
+                                    /*
+                                        title: Text(
+                                              nutritionData.maybeMap(
+                                                success: (d) => d
+                                                    .nutritionData.items!.single
+                                                    .toString(),
+                                                orElse: () => '',
+                                              ),
+                                            ),
+                                        */
+                                  });
                             },
-                            child: Text('View')),
+                            child: Text(
+                              'View',
+                              style: GoogleFonts.breeSerif(
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

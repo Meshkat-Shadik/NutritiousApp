@@ -1,0 +1,58 @@
+import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:nutri_app/presentation/widgets/custom_bottom_painter.dart';
+
+class ScannerAnimation extends AnimatedWidget {
+  final bool stopped;
+  final double width;
+
+  ScannerAnimation(
+    this.stopped,
+    this.width, {
+    Key? key,
+    required Animation<double> animation,
+  }) : super(
+          key: key,
+          listenable: animation,
+        );
+
+  Widget build(BuildContext context) {
+    final Animation<double> animation = listenable as Animation<double>;
+    final scorePosition = (animation.value * 440) + 16;
+
+    Color color1 = Color(0x881B5E20); //Color(0x5532CD32);
+    Color color2 = Color(0x001B5E20);
+
+    if (animation.status == AnimationStatus.reverse) {
+      color1 = Color(0x001B5E20);
+      color2 = Color(0x881B5E20);
+    }
+
+    return new Positioned(
+      bottom: scorePosition,
+      left: 16.0,
+      child: new Opacity(
+        opacity: (stopped) ? 0.0 : 1.0,
+        child: Container(
+          height: 60.0,
+          width: width,
+          child: CustomPaint(
+            size: Size(
+              width,
+              (width * 1.2).toDouble(),
+            ),
+          ),
+          decoration: new BoxDecoration(
+            gradient: new LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.1, 0.9],
+              colors: [color1, color2],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

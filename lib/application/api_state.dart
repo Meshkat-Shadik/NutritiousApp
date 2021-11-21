@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nutri_app/infrastructure/model/nutrition_data.dart';
+import 'package:nutri_app/infrastructure/model/nutrition_data_v2.dart';
 
 part 'api_state.freezed.dart';
 

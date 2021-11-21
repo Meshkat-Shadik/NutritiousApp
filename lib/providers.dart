@@ -14,6 +14,10 @@ final nutritionStateNotifierProvider = StateNotifierProvider.autoDispose<
         NutritionStateNotifier, NutritionDataState>(
     (ref) => (NutritionStateNotifier(ref.watch(nutritionClientProvider))));
 
+final buttonStateProvider = StateProvider<bool>((ref) {
+  return true;
+});
+
 // final nutritionFutureProvider =
 //     FutureProvider.autoDispose.family<NutritionData, String>((ref, name) async {
 //   final httpClient = ref.read(nutritionClientProvider);
