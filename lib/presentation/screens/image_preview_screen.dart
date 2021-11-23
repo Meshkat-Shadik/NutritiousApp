@@ -8,10 +8,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nutri_app/infrastructure/model/nutrition_data.dart';
 import 'package:nutri_app/presentation/constants.dart';
+import 'package:nutri_app/presentation/routes/router.gr.dart';
 import 'package:nutri_app/presentation/widgets/custom_bottom_painter.dart';
 import 'package:nutri_app/presentation/widgets/scanner_widget.dart';
 import 'package:nutri_app/providers.dart';
 import 'package:tflite/tflite.dart';
+import 'package:auto_route/auto_route.dart';
 
 class ImagePreviewScreen extends ConsumerStatefulWidget {
   ImagePreviewScreen({
@@ -314,44 +316,44 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen>
                               padding: const EdgeInsets.all(15.0),
                             ),
                             onPressed: () {
-                              ref.read(buttonStateProvider.state).state = false;
-                              nutritionData.maybeWhen(
+                              //ref.read(buttonStateProvider.state).state = false;
+                              /*nutritionData.maybeWhen(
                                   orElse: () => Container(),
                                   loading: () => Container(),
                                   success: (d) {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            content: SingleChildScrollView(
-                                              child: Column(
-                                                children: [
-                                                  Text('Name: $name'),
-                                                  Text(
-                                                      'Size: ${size!.toString()} g'),
-                                                  Text(
-                                                      'Calories: ${calories!.toString()} g'),
-                                                  Text(
-                                                      'Protein: ${protein!.toString()} g'),
-                                                  Text(
-                                                      'Carbohydrate: ${carbohydrate!.toString()} g'),
-                                                  Text(
-                                                      'Fiber: ${fiber!.toString()} g'),
-                                                  Text(
-                                                      'Cholesterol: ${cholesterol!.toString()} mg'),
-                                                  Text(
-                                                      'Fat Saturated: ${fatSaturated!.toString()} g'),
-                                                  Text(
-                                                      'Fat Total: ${fatTotal!.toString()} g'),
-                                                  Text(
-                                                      'Sodium: ${sodium!.toString()} mg'),
-                                                  Text(
-                                                      'Potassium: ${cholesterol!.toString()} Mg'),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        });
+                                    // showDialog(
+                                    //     context: context,
+                                    //     builder: (BuildContext context) {
+                                    //       return AlertDialog(
+                                    //         content: SingleChildScrollView(
+                                    //           child: Column(
+                                    //             children: [
+                                    //               Text('Name: $name'),
+                                    //               Text(
+                                    //                   'Size: ${size!.toString()} g'),
+                                    //               Text(
+                                    //                   'Calories: ${calories!.toString()} g'),
+                                    //               Text(
+                                    //                   'Protein: ${protein!.toString()} g'),
+                                    //               Text(
+                                    //                   'Carbohydrate: ${carbohydrate!.toString()} g'),
+                                    //               Text(
+                                    //                   'Fiber: ${fiber!.toString()} g'),
+                                    //               Text(
+                                    //                   'Cholesterol: ${cholesterol!.toString()} mg'),
+                                    //               Text(
+                                    //                   'Fat Saturated: ${fatSaturated!.toString()} g'),
+                                    //               Text(
+                                    //                   'Fat Total: ${fatTotal!.toString()} g'),
+                                    //               Text(
+                                    //                   'Sodium: ${sodium!.toString()} mg'),
+                                    //               Text(
+                                    //                   'Potassium: ${cholesterol!.toString()} Mg'),
+                                    //             ],
+                                    //           ),
+                                    //         ),
+                                    //       );
+                                    //     });
                                     /*
                                         title: Text(
                                               nutritionData.maybeMap(
@@ -362,7 +364,8 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen>
                                               ),
                                             ),
                                         */
-                                  });
+                                  });*/
+                              context.router.push(InformationScreenRoute());
                             },
                             child: Text(
                               'View',

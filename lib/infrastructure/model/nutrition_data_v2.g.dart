@@ -21,8 +21,8 @@ Map<String, dynamic> _$_$_NutritionDataV2ToJson(_$_NutritionDataV2 instance) =>
 
 _$_Food _$_$_FoodFromJson(Map<String, dynamic> json) {
   return _$_Food(
-    foodName: json['food_name'] as String?,
-    foodUrl: json['food_url'] as String?,
+    foodName: json['foodName'] as String?,
+    foodUrl: json['foodUrl'] as String?,
     servings: json['servings'] == null
         ? null
         : Servings.fromJson(json['servings'] as Map<String, dynamic>),
@@ -30,8 +30,8 @@ _$_Food _$_$_FoodFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$_$_FoodToJson(_$_Food instance) => <String, dynamic>{
-      'food_name': instance.foodName,
-      'food_url': instance.foodUrl,
+      'foodName': instance.foodName,
+      'foodUrl': instance.foodUrl,
       'servings': instance.servings,
     };
 
@@ -50,7 +50,7 @@ Map<String, dynamic> _$_$_ServingsToJson(_$_Servings instance) =>
 
 _$_Serving _$_$_ServingFromJson(Map<String, dynamic> json) {
   return _$_Serving(
-    addedSugars: json['added_sugars'] as String?,
+    addedSugars: json['addedSugars'] as String?,
     calcium: json['calcium'] as String?,
     calories: json['calories'] as String?,
     carbohydrate: json['carbohydrate'] as String?,
@@ -58,24 +58,24 @@ _$_Serving _$_$_ServingFromJson(Map<String, dynamic> json) {
     fat: json['fat'] as String?,
     fiber: json['fiber'] as String?,
     iron: json['iron'] as String?,
-    numberOfUnits: json['number_of_units'] as String?,
-    polyunsaturatedFat: json['polyunsaturated_fat'] as String?,
+    numberOfUnits: json['numberOfUnits'] as String?,
+    polyunsaturatedFat: json['polyunsaturatedFat'] as String?,
     potassium: json['potassium'] as String?,
     protein: json['protein'] as String?,
-    saturatedFat: json['saturated_fat'] as String?,
-    servingUrl: json['serving_url'] as String?,
+    saturatedFat: json['saturatedFat'] as String?,
+    servingUrl: json['servingUrl'] as String?,
     sodium: json['sodium'] as String?,
     sugar: json['sugar'] as String?,
-    transFat: json['trans_fat'] as String?,
-    vitaminA: json['vitamin_a'] as String?,
-    vitaminC: json['vitamin_c'] as String?,
-    vitaminD: json['vitamin_d'] as String?,
+    transFat: json['transFat'] as String?,
+    vitaminA: json['vitaminA'] as String?,
+    vitaminC: json['vitaminC'] as String?,
+    vitaminD: json['vitaminD'] as String?,
   );
 }
 
 Map<String, dynamic> _$_$_ServingToJson(_$_Serving instance) =>
     <String, dynamic>{
-      'added_sugars': instance.addedSugars,
+      'addedSugars': instance.addedSugars,
       'calcium': instance.calcium,
       'calories': instance.calories,
       'carbohydrate': instance.carbohydrate,
@@ -83,16 +83,16 @@ Map<String, dynamic> _$_$_ServingToJson(_$_Serving instance) =>
       'fat': instance.fat,
       'fiber': instance.fiber,
       'iron': instance.iron,
-      'number_of_units': instance.numberOfUnits,
-      'polyunsaturated_fat': instance.polyunsaturatedFat,
+      'numberOfUnits': instance.numberOfUnits,
+      'polyunsaturatedFat': instance.polyunsaturatedFat,
       'potassium': instance.potassium,
       'protein': instance.protein,
-      'saturated_fat': instance.saturatedFat,
-      'serving_url': instance.servingUrl,
+      'saturatedFat': instance.saturatedFat,
+      'servingUrl': instance.servingUrl,
       'sodium': instance.sodium,
       'sugar': instance.sugar,
-      'trans_fat': instance.transFat,
-      'vitamin_a': instance.vitaminA,
-      'vitamin_c': instance.vitaminC,
-      'vitamin_d': instance.vitaminD,
+      'transFat': instance.transFat,
+      'vitaminA': instance.vitaminA,
+      'vitaminC': instance.vitaminC,
+      'vitaminD': instance.vitaminD,
     };

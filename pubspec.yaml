@@ -32,6 +32,7 @@ dependencies:
   tflite: ^1.1.2
   freezed_annotation: ^0.14.2
   flutter_riverpod: ^1.0.0-dev.2
+  percent_indicator: "^3.4.0"
   http: ^0.13.3
   auto_route:
     git:

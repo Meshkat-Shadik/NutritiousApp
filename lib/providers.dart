@@ -23,3 +23,5 @@ final buttonStateProvider = StateProvider<bool>((ref) {
 //   final httpClient = ref.read(nutritionClientProvider);
 //   return httpClient.getNutritionData(name);
 // });
+
+//final currentInfo = Provider
