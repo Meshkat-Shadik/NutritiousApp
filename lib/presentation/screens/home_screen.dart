@@ -47,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: secondaryGreyColor,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Stack(
           children: [
@@ -234,24 +235,30 @@ class _MediaButtonState extends State<MediaButton> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          height: 100,
-          width: 100,
-          decoration: BoxDecoration(
-            color: secondaryGreyColor,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: buttonBoxShadowColor,
+        Card(
+          color: secondaryGreyColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
           ),
-          alignment: Alignment.center,
-          child: NeumorphicIcon(
-            widget.icon,
-            size: 50,
-            style: NeumorphicStyle(
-                color: Colors.green[900],
-                depth: 100,
-                shape: NeumorphicShape.concave,
-                lightSource: LightSource.topLeft),
-            // color: Colors.green[900],
+          elevation: 8,
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              //boxShadow: buttonBoxShadowColor,
+            ),
+            alignment: Alignment.center,
+            child: NeumorphicIcon(
+              widget.icon,
+              size: 50,
+              style: NeumorphicStyle(
+                  color: Colors.green[900],
+                  depth: 100,
+                  shape: NeumorphicShape.concave,
+                  lightSource: LightSource.topLeft),
+              // color: Colors.green[900],
+            ),
           ),
         ),
         SizedBox(height: 20),

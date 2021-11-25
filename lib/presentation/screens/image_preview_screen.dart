@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nutri_app/infrastructure/model/nutrition_data.dart';
 import 'package:nutri_app/presentation/constants.dart';
 import 'package:nutri_app/presentation/routes/router.gr.dart';
+import 'package:nutri_app/presentation/screens/information_screen.dart';
 import 'package:nutri_app/presentation/widgets/custom_bottom_painter.dart';
 import 'package:nutri_app/presentation/widgets/scanner_widget.dart';
 import 'package:nutri_app/providers.dart';
@@ -281,20 +282,6 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen>
                             initial: () => 'Scan Nutrition Data',
                             loading: () => 'Loading',
                             success: (d) {
-                              sugar = d.items!.single.sugarG;
-                              fiber = d.items!.single.fiberG;
-                              size = d.items!.single.servingSizeG;
-                              sodium = d.items!.single.sodiumMg;
-                              name = d.items!.single.name;
-                              fatSaturated = d.items!.single.fatSaturatedG;
-                              fatTotal = d.items!.single.fatTotalG;
-                              calories = d.items!.single.calories;
-                              cholesterol = d.items!.single.cholesterolMg;
-                              protein = d.items!.single.proteinG;
-                              carbohydrate =
-                                  d.items!.single.carbohydratesTotalG;
-                              potassium = d.items!.single.potassiumMg;
-
                               return 'Press View Button To See';
                             },
                             orElse: () => 'Scan Nutrition Data',
@@ -317,10 +304,15 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen>
                             ),
                             onPressed: () {
                               //ref.read(buttonStateProvider.state).state = false;
-                              /*nutritionData.maybeWhen(
+                              nutritionData.maybeWhen(
                                   orElse: () => Container(),
                                   loading: () => Container(),
                                   success: (d) {
+                                    if (d.status == 'Success') {
+                                      context.router.push(
+                                          InformationScreenRoute(
+                                              nutritionDataV2: d));
+                                    }
                                     // showDialog(
                                     //     context: context,
                                     //     builder: (BuildContext context) {
@@ -364,8 +356,8 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen>
                                               ),
                                             ),
                                         */
-                                  });*/
-                              context.router.push(InformationScreenRoute());
+                                  });
+                              //
                             },
                             child: Text(
                               'View',

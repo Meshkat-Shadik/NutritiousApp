@@ -1,22 +1,27 @@
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nutri_app/infrastructure/model/nutrition_data_v2.dart';
 import 'package:nutri_app/presentation/constants.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-class InformationScreen extends ConsumerStatefulWidget {
-  const InformationScreen({Key? key}) : super(key: key);
-
-  @override
-  _InformationScreenState createState() => _InformationScreenState();
-}
-
-class _InformationScreenState extends ConsumerState<InformationScreen> {
+class InformationScreen extends StatelessWidget {
+  const InformationScreen({
+    Key? key,
+    required this.nutritionDataV2,
+  }) : super(key: key);
+  final NutritionDataV2 nutritionDataV2;
   // bool isExpandG = false;
+
+  double calculatePercent(double? total, double? item) {
+    return (total! / item!);
+  }
 
   @override
   Widget build(BuildContext context) {
+    // print(nutritionDataV2.toString());
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
@@ -37,7 +42,7 @@ class _InformationScreenState extends ConsumerState<InformationScreen> {
             child: Column(
               children: [
                 Text(
-                  "Nutrition",
+                  nutritionDataV2.data!.name!.split(',').first.toUpperCase(),
                   style: GoogleFonts.breeSerif(fontSize: 32),
                 ),
                 SizedBox(height: 10),
@@ -60,21 +65,36 @@ class _InformationScreenState extends ConsumerState<InformationScreen> {
                               // Text('Hello'),
                               CircleChart(
                                 title: 'General Items',
-                                percent: 40,
+                                percent: calculatePercent(
+                                  nutritionDataV2
+                                      .data!.totalNutritionValue!.totGNutrition,
+                                  nutritionDataV2.data!.totalNutritionValue!
+                                      .totalNutrients,
+                                ),
                                 deepColor: Colors.teal.shade200,
                                 shadeColor: Colors.teal.shade50,
                               ),
                               CircleChart(
                                 title: 'Minerals',
-                                percent: 10,
+                                percent: calculatePercent(
+                                  nutritionDataV2
+                                      .data!.totalNutritionValue!.totMNutrition,
+                                  nutritionDataV2.data!.totalNutritionValue!
+                                      .totalNutrients,
+                                ),
                                 deepColor: Colors.amber,
-                                shadeColor: Colors.amber.shade50,
+                                shadeColor: Colors.amber.shade100,
                               ),
                               CircleChart(
                                 title: 'Vitamins',
-                                percent: 30,
+                                percent: calculatePercent(
+                                  nutritionDataV2
+                                      .data!.totalNutritionValue!.totVNutrition,
+                                  nutritionDataV2.data!.totalNutritionValue!
+                                      .totalNutrients,
+                                ),
                                 deepColor: Colors.lightGreen,
-                                shadeColor: Colors.lightGreen.shade50,
+                                shadeColor: Colors.lightGreen.shade100,
                               ),
                             ],
                           ),
@@ -86,17 +106,23 @@ class _InformationScreenState extends ConsumerState<InformationScreen> {
                 DetailItem(
                   title: 'General Items',
                   tColor: Colors.teal.shade200,
-                  loopMax: 12,
+                  loopMax: nutritionDataV2.data!.count!.generalItemsCount,
+                  data: nutritionDataV2.data!.generalItems,
+                  avatarOn: false,
                 ),
                 DetailItem(
                   title: 'Minerals',
                   tColor: Colors.amber,
                   loopMax: 8,
+                  data: nutritionDataV2.data!.mineralItems!,
+                  avatarOn: true,
                 ),
                 DetailItem(
                   title: 'Vitamins',
                   tColor: Colors.lightGreen,
                   loopMax: 9,
+                  data: nutritionDataV2.data!.vitaminItems,
+                  avatarOn: false,
                 ),
               ],
             ),
@@ -113,13 +139,19 @@ class DetailItem extends StatelessWidget {
     required this.title,
     required this.tColor,
     required this.loopMax,
+    required this.data,
+    required this.avatarOn,
   }) : super(key: key);
   final String title;
   final Color tColor;
-  final int loopMax;
+  final int? loopMax;
+  final List<Item>? data;
+  final bool avatarOn;
 
   @override
   Widget build(BuildContext context) {
+    // print(data!.last.unit.toString());
+    // for (int i = 0; i < loopMax!; i++) print(Unit.values[i]);
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(
@@ -149,17 +181,34 @@ class DetailItem extends StatelessWidget {
           expandedAlignment: Alignment.centerLeft,
           collapsedBackgroundColor: Colors.white,
           childrenPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           children: [
-            for (int i = 0; i < loopMax; i++)
-              Text(
-                'General Items',
-                style: GoogleFonts.breeSerif(fontSize: 20),
+            for (int i = 0; i < loopMax!; i++)
+              ListTile(
+                leading: avatarOn
+                    ? CircleAvatar(
+                        backgroundColor: Colors.black87,
+                        radius: 18,
+                        child: Text(
+                          data![i].nutrientName!.toString().split(',').last,
+                          style: GoogleFonts.breeSerif(color: Colors.white),
+                        ),
+                      )
+                    : SizedBox(height: 2, width: 2),
+                title: Text(
+                  data![i].nutrientName!.toString(),
+                  style: GoogleFonts.breeSerif(
+                    fontSize: 18,
+                  ),
+                ),
+                trailing: Text(
+                  '${data![i].nutrientValue!.toString()} ${(Unit.values[data![i].unit!.index]).toString().split('.').last.toLowerCase()}',
+                  style: GoogleFonts.breeSerif(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            // Text(
-            //   'General Items',
-            //   style: GoogleFonts.breeSerif(fontSize: 20),
-            // ),
           ],
         ),
       ),
@@ -188,13 +237,13 @@ class CircleChart extends StatelessWidget {
         CircularPercentIndicator(
           radius: 100.0,
           lineWidth: 15.0,
-          percent: percent / 100,
-          circularStrokeCap: CircularStrokeCap.round,
+          percent: percent,
+          circularStrokeCap: CircularStrokeCap.butt,
           center: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${percent.toString()}%',
+                '${(percent * 100).toStringAsFixed(2)}%',
                 style: GoogleFonts.breeSerif(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -211,6 +260,7 @@ class CircleChart extends StatelessWidget {
           style: GoogleFonts.breeSerif(
             color: Colors.grey[700],
             fontSize: 16,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ],

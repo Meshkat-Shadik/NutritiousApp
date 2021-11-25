@@ -8,91 +8,138 @@ part of 'nutrition_data_v2.dart';
 
 _$_NutritionDataV2 _$_$_NutritionDataV2FromJson(Map<String, dynamic> json) {
   return _$_NutritionDataV2(
-    food: json['food'] == null
+    status: json['status'] as String?,
+    data: json['data'] == null
         ? null
-        : Food.fromJson(json['food'] as Map<String, dynamic>),
+        : Data.fromJson(json['data'] as Map<String, dynamic>),
   );
 }
 
 Map<String, dynamic> _$_$_NutritionDataV2ToJson(_$_NutritionDataV2 instance) =>
     <String, dynamic>{
-      'food': instance.food,
+      'status': instance.status,
+      'data': instance.data,
     };
 
-_$_Food _$_$_FoodFromJson(Map<String, dynamic> json) {
-  return _$_Food(
-    foodName: json['foodName'] as String?,
-    foodUrl: json['foodUrl'] as String?,
-    servings: json['servings'] == null
+_$_Data _$_$_DataFromJson(Map<String, dynamic> json) {
+  return _$_Data(
+    name: json['name'] as String?,
+    count: json['count'] == null
         ? null
-        : Servings.fromJson(json['servings'] as Map<String, dynamic>),
-  );
-}
-
-Map<String, dynamic> _$_$_FoodToJson(_$_Food instance) => <String, dynamic>{
-      'foodName': instance.foodName,
-      'foodUrl': instance.foodUrl,
-      'servings': instance.servings,
-    };
-
-_$_Servings _$_$_ServingsFromJson(Map<String, dynamic> json) {
-  return _$_Servings(
-    serving: json['serving'] == null
+        : Count.fromJson(json['count'] as Map<String, dynamic>),
+    totalNutritionValue: json['totalNutritionValue'] == null
         ? null
-        : Serving.fromJson(json['serving'] as Map<String, dynamic>),
+        : TotalNutritionValue.fromJson(
+            json['totalNutritionValue'] as Map<String, dynamic>),
+    source: json['source'] as String?,
+    generalItems: (json['generalItems'] as List<dynamic>?)
+        ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    mineralItems: (json['mineralItems'] as List<dynamic>?)
+        ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    vitaminItems: (json['vitaminItems'] as List<dynamic>?)
+        ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
-Map<String, dynamic> _$_$_ServingsToJson(_$_Servings instance) =>
-    <String, dynamic>{
-      'serving': instance.serving,
+Map<String, dynamic> _$_$_DataToJson(_$_Data instance) => <String, dynamic>{
+      'name': instance.name,
+      'count': instance.count,
+      'totalNutritionValue': instance.totalNutritionValue,
+      'source': instance.source,
+      'generalItems': instance.generalItems,
+      'mineralItems': instance.mineralItems,
+      'vitaminItems': instance.vitaminItems,
     };
 
-_$_Serving _$_$_ServingFromJson(Map<String, dynamic> json) {
-  return _$_Serving(
-    addedSugars: json['addedSugars'] as String?,
-    calcium: json['calcium'] as String?,
-    calories: json['calories'] as String?,
-    carbohydrate: json['carbohydrate'] as String?,
-    cholesterol: json['cholesterol'] as String?,
-    fat: json['fat'] as String?,
-    fiber: json['fiber'] as String?,
-    iron: json['iron'] as String?,
-    numberOfUnits: json['numberOfUnits'] as String?,
-    polyunsaturatedFat: json['polyunsaturatedFat'] as String?,
-    potassium: json['potassium'] as String?,
-    protein: json['protein'] as String?,
-    saturatedFat: json['saturatedFat'] as String?,
-    servingUrl: json['servingUrl'] as String?,
-    sodium: json['sodium'] as String?,
-    sugar: json['sugar'] as String?,
-    transFat: json['transFat'] as String?,
-    vitaminA: json['vitaminA'] as String?,
-    vitaminC: json['vitaminC'] as String?,
-    vitaminD: json['vitaminD'] as String?,
+_$_Count _$_$_CountFromJson(Map<String, dynamic> json) {
+  return _$_Count(
+    generalItemsCount: json['generalItemsCount'] as int?,
+    mineralItemCount: json['mineralItemCount'] as int?,
+    vitaminItemCount: json['vitaminItemCount'] as int?,
   );
 }
 
-Map<String, dynamic> _$_$_ServingToJson(_$_Serving instance) =>
+Map<String, dynamic> _$_$_CountToJson(_$_Count instance) => <String, dynamic>{
+      'generalItemsCount': instance.generalItemsCount,
+      'mineralItemCount': instance.mineralItemCount,
+      'vitaminItemCount': instance.vitaminItemCount,
+    };
+
+_$_Item _$_$_ItemFromJson(Map<String, dynamic> json) {
+  return _$_Item(
+    nutrientName: json['nutrientName'] as String?,
+    nutrientValue: (json['nutrientValue'] as num?)?.toDouble(),
+    unit: _$enumDecodeNullable(_$UnitEnumMap, json['unit']),
+  );
+}
+
+Map<String, dynamic> _$_$_ItemToJson(_$_Item instance) => <String, dynamic>{
+      'nutrientName': instance.nutrientName,
+      'nutrientValue': instance.nutrientValue,
+      'unit': _$UnitEnumMap[instance.unit],
+    };
+
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
+  }
+
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
+}
+
+K? _$enumDecodeNullable<K, V>(
+  Map<K, V> enumValues,
+  dynamic source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    return null;
+  }
+  return _$enumDecode<K, V>(enumValues, source, unknownValue: unknownValue);
+}
+
+const _$UnitEnumMap = {
+  Unit.G: 'G',
+  Unit.MG: 'MG',
+  Unit.UG: 'UG',
+};
+
+_$_TotalNutritionValue _$_$_TotalNutritionValueFromJson(
+    Map<String, dynamic> json) {
+  return _$_TotalNutritionValue(
+    totalNutrients: (json['totalNutrients'] as num?)?.toDouble(),
+    totGNutrition: (json['totGNutrition'] as num?)?.toDouble(),
+    totMNutrition: (json['totMNutrition'] as num?)?.toDouble(),
+    totVNutrition: (json['totVNutrition'] as num?)?.toDouble(),
+  );
+}
+
+Map<String, dynamic> _$_$_TotalNutritionValueToJson(
+        _$_TotalNutritionValue instance) =>
     <String, dynamic>{
-      'addedSugars': instance.addedSugars,
-      'calcium': instance.calcium,
-      'calories': instance.calories,
-      'carbohydrate': instance.carbohydrate,
-      'cholesterol': instance.cholesterol,
-      'fat': instance.fat,
-      'fiber': instance.fiber,
-      'iron': instance.iron,
-      'numberOfUnits': instance.numberOfUnits,
-      'polyunsaturatedFat': instance.polyunsaturatedFat,
-      'potassium': instance.potassium,
-      'protein': instance.protein,
-      'saturatedFat': instance.saturatedFat,
-      'servingUrl': instance.servingUrl,
-      'sodium': instance.sodium,
-      'sugar': instance.sugar,
-      'transFat': instance.transFat,
-      'vitaminA': instance.vitaminA,
-      'vitaminC': instance.vitaminC,
-      'vitaminD': instance.vitaminD,
+      'totalNutrients': instance.totalNutrients,
+      'totGNutrition': instance.totGNutrition,
+      'totMNutrition': instance.totMNutrition,
+      'totVNutrition': instance.totVNutrition,
     };

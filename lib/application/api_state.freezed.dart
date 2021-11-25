@@ -24,7 +24,7 @@ class _$NutritionDataStateTearOff {
     return const _WeatherLoading();
   }
 
-  _WeatherLoadedSuccess success(NutritionData nutritionData) {
+  _WeatherLoadedSuccess success(NutritionDataV2 nutritionData) {
     return _WeatherLoadedSuccess(
       nutritionData,
     );
@@ -46,7 +46,7 @@ mixin _$NutritionDataState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(NutritionData nutritionData) success,
+    required TResult Function(NutritionDataV2 nutritionData) success,
     required TResult Function(String? message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -54,7 +54,7 @@ mixin _$NutritionDataState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(NutritionData nutritionData)? success,
+    TResult Function(NutritionDataV2 nutritionData)? success,
     TResult Function(String? message)? error,
     required TResult orElse(),
   }) =>
@@ -137,7 +137,7 @@ class _$_WeatherInitial implements _WeatherInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(NutritionData nutritionData) success,
+    required TResult Function(NutritionDataV2 nutritionData) success,
     required TResult Function(String? message) error,
   }) {
     return initial();
@@ -148,7 +148,7 @@ class _$_WeatherInitial implements _WeatherInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(NutritionData nutritionData)? success,
+    TResult Function(NutritionDataV2 nutritionData)? success,
     TResult Function(String? message)? error,
     required TResult orElse(),
   }) {
@@ -231,7 +231,7 @@ class _$_WeatherLoading implements _WeatherLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(NutritionData nutritionData) success,
+    required TResult Function(NutritionDataV2 nutritionData) success,
     required TResult Function(String? message) error,
   }) {
     return loading();
@@ -242,7 +242,7 @@ class _$_WeatherLoading implements _WeatherLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(NutritionData nutritionData)? success,
+    TResult Function(NutritionDataV2 nutritionData)? success,
     TResult Function(String? message)? error,
     required TResult orElse(),
   }) {
@@ -288,9 +288,9 @@ abstract class _$WeatherLoadedSuccessCopyWith<$Res> {
   factory _$WeatherLoadedSuccessCopyWith(_WeatherLoadedSuccess value,
           $Res Function(_WeatherLoadedSuccess) then) =
       __$WeatherLoadedSuccessCopyWithImpl<$Res>;
-  $Res call({NutritionData nutritionData});
+  $Res call({NutritionDataV2 nutritionData});
 
-  $NutritionDataCopyWith<$Res> get nutritionData;
+  $NutritionDataV2CopyWith<$Res> get nutritionData;
 }
 
 /// @nodoc
@@ -312,13 +312,13 @@ class __$WeatherLoadedSuccessCopyWithImpl<$Res>
       nutritionData == freezed
           ? _value.nutritionData
           : nutritionData // ignore: cast_nullable_to_non_nullable
-              as NutritionData,
+              as NutritionDataV2,
     ));
   }
 
   @override
-  $NutritionDataCopyWith<$Res> get nutritionData {
-    return $NutritionDataCopyWith<$Res>(_value.nutritionData, (value) {
+  $NutritionDataV2CopyWith<$Res> get nutritionData {
+    return $NutritionDataV2CopyWith<$Res>(_value.nutritionData, (value) {
       return _then(_value.copyWith(nutritionData: value));
     });
   }
@@ -330,7 +330,7 @@ class _$_WeatherLoadedSuccess implements _WeatherLoadedSuccess {
   const _$_WeatherLoadedSuccess(this.nutritionData);
 
   @override
-  final NutritionData nutritionData;
+  final NutritionDataV2 nutritionData;
 
   @override
   String toString() {
@@ -361,7 +361,7 @@ class _$_WeatherLoadedSuccess implements _WeatherLoadedSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(NutritionData nutritionData) success,
+    required TResult Function(NutritionDataV2 nutritionData) success,
     required TResult Function(String? message) error,
   }) {
     return success(nutritionData);
@@ -372,7 +372,7 @@ class _$_WeatherLoadedSuccess implements _WeatherLoadedSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(NutritionData nutritionData)? success,
+    TResult Function(NutritionDataV2 nutritionData)? success,
     TResult Function(String? message)? error,
     required TResult orElse(),
   }) {
@@ -410,10 +410,10 @@ class _$_WeatherLoadedSuccess implements _WeatherLoadedSuccess {
 }
 
 abstract class _WeatherLoadedSuccess implements NutritionDataState {
-  const factory _WeatherLoadedSuccess(NutritionData nutritionData) =
+  const factory _WeatherLoadedSuccess(NutritionDataV2 nutritionData) =
       _$_WeatherLoadedSuccess;
 
-  NutritionData get nutritionData => throw _privateConstructorUsedError;
+  NutritionDataV2 get nutritionData => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$WeatherLoadedSuccessCopyWith<_WeatherLoadedSuccess> get copyWith =>
       throw _privateConstructorUsedError;
@@ -486,7 +486,7 @@ class _$_WeatherLoadedError implements _WeatherLoadedError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(NutritionData nutritionData) success,
+    required TResult Function(NutritionDataV2 nutritionData) success,
     required TResult Function(String? message) error,
   }) {
     return error(message);
@@ -497,7 +497,7 @@ class _$_WeatherLoadedError implements _WeatherLoadedError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(NutritionData nutritionData)? success,
+    TResult Function(NutritionDataV2 nutritionData)? success,
     TResult Function(String? message)? error,
     required TResult orElse(),
   }) {

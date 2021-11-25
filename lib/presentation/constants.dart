@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 
+String baseUrl = 'https://nutritionapiv2.herokuapp.com/test/q?name=';
 const primaryGreenColor = Color(0xff28C528);
 const secondaryGreyColor = Color(0xffedf3fa);
 const deepShadeColor = Color(0xffd3ebd3);

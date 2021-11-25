@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nutri_app/application/api_state.dart';
 import 'package:nutri_app/application/nutrition_notifier.dart';
 import 'package:nutri_app/infrastructure/model/nutrition_data.dart';
+import 'package:nutri_app/infrastructure/model/nutrition_data_v2.dart';
 import 'package:nutri_app/infrastructure/nutrition_repository.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,4 +25,5 @@ final buttonStateProvider = StateProvider<bool>((ref) {
 //   return httpClient.getNutritionData(name);
 // });
 
-//final currentInfo = Provider
+final currentInfo =
+    Provider<NutritionDataV2>((ref) => throw UnimplementedError());

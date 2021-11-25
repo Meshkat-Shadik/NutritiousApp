@@ -9,6 +9,7 @@ import 'dart:io' as _i8;
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 
+import '../../infrastructure/model/nutrition_data_v2.dart' as _i9;
 import '../screens/home_screen.dart' as _i5;
 import '../screens/image_preview_screen.dart' as _i6;
 import '../screens/information_screen.dart' as _i7;
@@ -49,8 +50,10 @@ class AppRouter extends _i1.RootStackRouter {
         }),
     InformationScreenRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
-        builder: (_) {
-          return const _i7.InformationScreen();
+        builder: (data) {
+          final args = data.argsAs<InformationScreenRouteArgs>();
+          return _i7.InformationScreen(
+              key: args.key, nutritionDataV2: args.nutritionDataV2);
         })
   };
 
@@ -115,8 +118,22 @@ class ImagePreviewScreenRouteArgs {
   final String? testString;
 }
 
-class InformationScreenRoute extends _i1.PageRouteInfo<void> {
-  const InformationScreenRoute() : super(name, path: '/information-screen');
+class InformationScreenRoute
+    extends _i1.PageRouteInfo<InformationScreenRouteArgs> {
+  InformationScreenRoute(
+      {_i2.Key? key, required _i9.NutritionDataV2 nutritionDataV2})
+      : super(name,
+            path: '/information-screen',
+            args: InformationScreenRouteArgs(
+                key: key, nutritionDataV2: nutritionDataV2));
 
   static const String name = 'InformationScreenRoute';
+}
+
+class InformationScreenRouteArgs {
+  const InformationScreenRouteArgs({this.key, required this.nutritionDataV2});
+
+  final _i2.Key? key;
+
+  final _i9.NutritionDataV2 nutritionDataV2;
 }

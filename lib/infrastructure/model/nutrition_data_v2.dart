@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final NutritionDataV2 = NutritionDataV2FromJson(jsonString);
+//     final nutritionDataV2 = nutritionDataV2FromJson(jsonString);
 
 import 'package:meta/meta.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -9,16 +9,17 @@ import 'dart:convert';
 part 'nutrition_data_v2.freezed.dart';
 part 'nutrition_data_v2.g.dart';
 
-NutritionDataV2 NutritionDataV2FromJson(String str) =>
+NutritionDataV2 nutritionDataV2FromJson(String str) =>
     NutritionDataV2.fromJson(json.decode(str));
 
-String NutritionDataV2ToJson(NutritionDataV2 data) =>
+String nutritionDataV2ToJson(NutritionDataV2 data) =>
     json.encode(data.toJson());
 
 @freezed
 abstract class NutritionDataV2 with _$NutritionDataV2 {
   const factory NutritionDataV2({
-    @required Food? food,
+    @required String? status,
+    @required Data? data,
   }) = _NutritionDataV2;
 
   factory NutritionDataV2.fromJson(Map<String, dynamic> json) =>
@@ -26,51 +27,69 @@ abstract class NutritionDataV2 with _$NutritionDataV2 {
 }
 
 @freezed
-abstract class Food with _$Food {
-  const factory Food({
-    @required String? foodName,
-    @required String? foodUrl,
-    @required Servings? servings,
-  }) = _Food;
+abstract class Data with _$Data {
+  const factory Data({
+    @required String? name,
+    @required Count? count,
+    @required TotalNutritionValue? totalNutritionValue,
+    @required String? source,
+    @required List<Item>? generalItems,
+    @required List<Item>? mineralItems,
+    @required List<Item>? vitaminItems,
+  }) = _Data;
 
-  factory Food.fromJson(Map<String, dynamic> json) => _$FoodFromJson(json);
+  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 }
 
 @freezed
-abstract class Servings with _$Servings {
-  const factory Servings({
-    @required Serving? serving,
-  }) = _Servings;
+abstract class Count with _$Count {
+  const factory Count({
+    @required int? generalItemsCount,
+    @required int? mineralItemCount,
+    @required int? vitaminItemCount,
+  }) = _Count;
 
-  factory Servings.fromJson(Map<String, dynamic> json) =>
-      _$ServingsFromJson(json);
+  factory Count.fromJson(Map<String, dynamic> json) => _$CountFromJson(json);
 }
 
 @freezed
-abstract class Serving with _$Serving {
-  const factory Serving({
-    @required String? addedSugars,
-    @required String? calcium,
-    @required String? calories,
-    @required String? carbohydrate,
-    @required String? cholesterol,
-    @required String? fat,
-    @required String? fiber,
-    @required String? iron,
-    @required String? numberOfUnits,
-    @required String? polyunsaturatedFat,
-    @required String? potassium,
-    @required String? protein,
-    @required String? saturatedFat,
-    @required String? servingUrl,
-    @required String? sodium,
-    @required String? sugar,
-    @required String? transFat,
-    @required String? vitaminA,
-    @required String? vitaminC,
-    @required String? vitaminD,
-  }) = _Serving;
+abstract class Item with _$Item {
+  const factory Item({
+    @required String? nutrientName,
+    @required double? nutrientValue,
+    @required Unit? unit,
+  }) = _Item;
 
-  factory Serving.fromJson(Map<String, dynamic> json) =>
-      _$ServingFromJson(json);
+  factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
+}
+
+enum Unit { G, MG, UG }
+
+final unitValues = EnumValues({"G": Unit.G, "MG": Unit.MG, "UG": Unit.UG});
+
+@freezed
+abstract class TotalNutritionValue with _$TotalNutritionValue {
+  const factory TotalNutritionValue({
+    @required double? totalNutrients,
+    @required double? totGNutrition,
+    @required double? totMNutrition,
+    @required double? totVNutrition,
+  }) = _TotalNutritionValue;
+
+  factory TotalNutritionValue.fromJson(Map<String, dynamic> json) =>
+      _$TotalNutritionValueFromJson(json);
+}
+
+class EnumValues<T> {
+  Map<String, T> map;
+  Map<T, String>? reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    if (reverseMap == null) {
+      reverseMap = map.map((k, v) => new MapEntry(v, k));
+    }
+    return reverseMap ?? {};
+  }
 }

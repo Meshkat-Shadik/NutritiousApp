@@ -8,7 +8,7 @@ part 'api_state.freezed.dart';
 abstract class NutritionDataState with _$NutritionDataState {
   const factory NutritionDataState.initial() = _WeatherInitial;
   const factory NutritionDataState.loading() = _WeatherLoading;
-  const factory NutritionDataState.success(NutritionData nutritionData) =
+  const factory NutritionDataState.success(NutritionDataV2 nutritionData) =
       _WeatherLoadedSuccess;
   const factory NutritionDataState.error([String? message]) =
       _WeatherLoadedError;
