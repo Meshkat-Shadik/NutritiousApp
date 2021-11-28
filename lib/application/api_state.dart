@@ -13,3 +13,13 @@ abstract class NutritionDataState with _$NutritionDataState {
   const factory NutritionDataState.error([String? message]) =
       _WeatherLoadedError;
 }
+
+@freezed
+abstract class NutritionDataStateV1 with _$NutritionDataStateV1 {
+  const factory NutritionDataStateV1.initial() = _WeatherInitialV1;
+  const factory NutritionDataStateV1.loading() = _WeatherLoadingV1;
+  const factory NutritionDataStateV1.success(NutritionData nutritionData) =
+      _WeatherLoadedSuccessV1;
+  const factory NutritionDataStateV1.error([String? message]) =
+      _WeatherLoadedErrorV1;
+}

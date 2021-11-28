@@ -17,3 +17,21 @@ class NutritionStateNotifier extends StateNotifier<NutritionDataState> {
     }
   }
 }
+
+
+
+class NutritionStateNotifierV1 extends StateNotifier<NutritionDataStateV1> {
+  final NutritionRepositoryV1 _nutritionRepository;
+  NutritionStateNotifierV1(this._nutritionRepository)
+      : super(NutritionDataStateV1.initial());
+
+  Future<void> getNutritionData(String name) async {
+    try {
+      state = NutritionDataStateV1.loading();
+      var data = await _nutritionRepository.getNutritionData(name);
+      state = NutritionDataStateV1.success(data);
+    } catch (e) {
+      state = NutritionDataStateV1.error('$e');
+    }
+  }
+}

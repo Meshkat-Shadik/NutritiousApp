@@ -19,6 +19,14 @@ final buttonStateProvider = StateProvider<bool>((ref) {
   return true;
 });
 
+final nutritionClientProviderV1 =
+    Provider.autoDispose((ref) => NutritionRepositoryV1(http.Client()));
+
+//dependent source
+final nutritionStateNotifierProviderV1 = StateNotifierProvider.autoDispose<
+        NutritionStateNotifierV1, NutritionDataStateV1>(
+    (ref) => (NutritionStateNotifierV1(ref.watch(nutritionClientProviderV1))));
+
 // final nutritionFutureProvider =
 //     FutureProvider.autoDispose.family<NutritionData, String>((ref, name) async {
 //   final httpClient = ref.read(nutritionClientProvider);

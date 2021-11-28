@@ -11,7 +11,7 @@ _$_NutritionDataV2 _$_$_NutritionDataV2FromJson(Map<String, dynamic> json) {
     status: json['status'] as String?,
     data: json['data'] == null
         ? null
-        : Data.fromJson(json['data'] as Map<String, dynamic>),
+        : Data.fromJson(json['data'] as Map<String, dynamic>?),
   );
 }
 
@@ -120,6 +120,7 @@ K? _$enumDecodeNullable<K, V>(
 }
 
 const _$UnitEnumMap = {
+  Unit.K_J: 'kJ',
   Unit.G: 'G',
   Unit.MG: 'MG',
   Unit.UG: 'UG',

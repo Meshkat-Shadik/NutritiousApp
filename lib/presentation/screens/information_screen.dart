@@ -42,7 +42,7 @@ class InformationScreen extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  nutritionDataV2.data!.name!.split(',').first.toUpperCase(),
+                  nutritionDataV2.data!.name!.replaceAll(',', '').toUpperCase(),
                   style: GoogleFonts.breeSerif(fontSize: 32),
                 ),
                 SizedBox(height: 10),
@@ -113,14 +113,14 @@ class InformationScreen extends StatelessWidget {
                 DetailItem(
                   title: 'Minerals',
                   tColor: Colors.amber,
-                  loopMax: 8,
+                  loopMax: nutritionDataV2.data!.count!.mineralItemCount,
                   data: nutritionDataV2.data!.mineralItems!,
                   avatarOn: true,
                 ),
                 DetailItem(
                   title: 'Vitamins',
                   tColor: Colors.lightGreen,
-                  loopMax: 9,
+                  loopMax: nutritionDataV2.data!.count!.vitaminItemCount,
                   data: nutritionDataV2.data!.vitaminItems,
                   avatarOn: false,
                 ),

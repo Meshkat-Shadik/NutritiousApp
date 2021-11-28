@@ -38,7 +38,7 @@ abstract class Data with _$Data {
     @required List<Item>? vitaminItems,
   }) = _Data;
 
-  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
+  factory Data.fromJson(Map<String, dynamic>? json) => _$DataFromJson(json!);
 }
 
 @freezed
@@ -63,9 +63,10 @@ abstract class Item with _$Item {
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
 }
 
-enum Unit { G, MG, UG }
+enum Unit { K_J, G, MG, UG }
 
-final unitValues = EnumValues({"G": Unit.G, "MG": Unit.MG, "UG": Unit.UG});
+final unitValues =
+    EnumValues({"G": Unit.G, "kJ": Unit.K_J, "MG": Unit.MG, "UG": Unit.UG});
 
 @freezed
 abstract class TotalNutritionValue with _$TotalNutritionValue {
@@ -81,15 +82,15 @@ abstract class TotalNutritionValue with _$TotalNutritionValue {
 }
 
 class EnumValues<T> {
-  Map<String, T> map;
+  Map<String, T>? map;
   Map<T, String>? reverseMap;
 
   EnumValues(this.map);
 
   Map<T, String> get reverse {
     if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
+      reverseMap = map!.map((k, v) => new MapEntry(v, k));
     }
-    return reverseMap ?? {};
+    return reverseMap!;
   }
 }

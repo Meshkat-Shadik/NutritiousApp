@@ -6,26 +6,43 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nutri_app/presentation/constants.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nutri_app/presentation/routes/router.gr.dart';
 import 'package:nutri_app/presentation/screens/image_preview_screen.dart';
 import 'package:nutri_app/presentation/screens/test_api.dart';
 import 'package:nutri_app/presentation/screens/test_detection.dart';
 import 'package:nutri_app/presentation/widgets/custom_bg_painter.dart';
+import 'package:nutri_app/providers.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   late File? pickedImage;
   bool isImageLoaded = false;
   List? _result;
   String? _confidence = "";
   String _name = "";
   String _numbers = "";
+
+  double? sugar;
+  double? fiber;
+  double? size;
+  double? sodium;
+  String? name;
+  double? potassium;
+  double? fatSaturated;
+  double? fatTotal;
+  double? calories;
+  double? cholesterol;
+  double? protein;
+  double? carbohydrate;
+
+  final nameController = TextEditingController();
 
   grabImage(ImageSource source) async {
     var tempStore = await ImagePicker().pickImage(source: source);
@@ -42,9 +59,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
+    final v1Data = ref.watch(nutritionStateNotifierProviderV1);
+
     return Scaffold(
       backgroundColor: secondaryGreyColor,
       resizeToAvoidBottomInset: false,
@@ -86,14 +112,73 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         border: InputBorder.none,
                         suffixIcon: IconButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            await ref
+                                .watch(
+                                    nutritionStateNotifierProviderV1.notifier)
+                                .getNutritionData(nameController.text.trim());
+                            v1Data.maybeWhen(
+                              success: (d) {
+                                sugar = d.items!.single.sugarG;
+                                fiber = d.items!.single.fiberG;
+                                size = d.items!.single.servingSizeG;
+                                sodium = d.items!.single.sodiumMg;
+                                name = d.items!.single.name;
+                                fatSaturated = d.items!.single.fatSaturatedG;
+                                fatTotal = d.items!.single.fatTotalG;
+                                calories = d.items!.single.calories;
+                                cholesterol = d.items!.single.cholesterolMg;
+                                protein = d.items!.single.proteinG;
+                                carbohydrate =
+                                    d.items!.single.carbohydratesTotalG;
+                                potassium = d.items!.single.potassiumMg;
+
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              Text('Name: $name'),
+                                              Text(
+                                                  'Size: ${size!.toString()} g'),
+                                              Text(
+                                                  'Calories: ${calories!.toString()} g'),
+                                              Text(
+                                                  'Protein: ${protein!.toString()} g'),
+                                              Text(
+                                                  'Carbohydrate: ${carbohydrate!.toString()} g'),
+                                              Text(
+                                                  'Fiber: ${fiber!.toString()} g'),
+                                              Text(
+                                                  'Cholesterol: ${cholesterol!.toString()} mg'),
+                                              Text(
+                                                  'Fat Saturated: ${fatSaturated!.toString()} g'),
+                                              Text(
+                                                  'Fat Total: ${fatTotal!.toString()} g'),
+                                              Text(
+                                                  'Sodium: ${sodium!.toString()} mg'),
+                                              Text(
+                                                  'Potassium: ${cholesterol!.toString()} Mg'),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    });
+                              },
+                              orElse: () {
+                                print('OrElse');
+                              },
+                            );
+                          },
                           splashColor: Colors.transparent,
                           icon: Icon(Icons.search),
                           iconSize: 32,
                         ),
                       ),
                       autocorrect: false,
-                      onChanged: (value) {},
+                      controller: nameController,
                     ),
                   ),
                   SizedBox(height: height / 3.5),
