@@ -133,40 +133,79 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     d.items!.single.carbohydratesTotalG;
                                 potassium = d.items!.single.potassiumMg;
 
-                                showDialog(
+                                return showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         content: SingleChildScrollView(
                                           child: Column(
                                             children: [
-                                              Text('Name: $name'),
                                               Text(
-                                                  'Size: ${size!.toString()} g'),
+                                                'Name: $name',
+                                                style: GoogleFonts.breeSerif(
+                                                    fontSize: 20),
+                                              ),
+                                              Container(
+                                                height: 1,
+                                                color: Colors.grey,
+                                              ),
                                               Text(
-                                                  'Calories: ${calories!.toString()} g'),
+                                                'Serving Size: ${size!.toString()} g',
+                                                style: GoogleFonts.breeSerif(
+                                                    fontSize: 18),
+                                              ),
                                               Text(
-                                                  'Protein: ${protein!.toString()} g'),
+                                                'Calories: ${calories!.toString()} g',
+                                                style: GoogleFonts.breeSerif(
+                                                    fontSize: 18),
+                                              ),
                                               Text(
-                                                  'Carbohydrate: ${carbohydrate!.toString()} g'),
+                                                'Protein: ${protein!.toString()} g',
+                                                style: GoogleFonts.breeSerif(
+                                                    fontSize: 18),
+                                              ),
                                               Text(
-                                                  'Fiber: ${fiber!.toString()} g'),
+                                                'Carbohydrate: ${carbohydrate!.toString()} g',
+                                                style: GoogleFonts.breeSerif(
+                                                    fontSize: 18),
+                                              ),
                                               Text(
-                                                  'Cholesterol: ${cholesterol!.toString()} mg'),
+                                                'Fiber: ${fiber!.toString()} g',
+                                                style: GoogleFonts.breeSerif(
+                                                    fontSize: 18),
+                                              ),
                                               Text(
-                                                  'Fat Saturated: ${fatSaturated!.toString()} g'),
+                                                'Cholesterol: ${cholesterol!.toString()} mg',
+                                                style: GoogleFonts.breeSerif(
+                                                    fontSize: 18),
+                                              ),
                                               Text(
-                                                  'Fat Total: ${fatTotal!.toString()} g'),
+                                                'Fat Saturated: ${fatSaturated!.toString()} g',
+                                                style: GoogleFonts.breeSerif(
+                                                    fontSize: 18),
+                                              ),
                                               Text(
-                                                  'Sodium: ${sodium!.toString()} mg'),
+                                                'Fat Total: ${fatTotal!.toString()} g',
+                                                style: GoogleFonts.breeSerif(
+                                                    fontSize: 18),
+                                              ),
                                               Text(
-                                                  'Potassium: ${cholesterol!.toString()} Mg'),
+                                                'Sodium: ${sodium!.toString()} mg',
+                                                style: GoogleFonts.breeSerif(
+                                                    fontSize: 18),
+                                              ),
+                                              Text(
+                                                'Potassium: ${cholesterol!.toString()} Mg',
+                                                style: GoogleFonts.breeSerif(
+                                                    fontSize: 18),
+                                              ),
                                             ],
                                           ),
                                         ),
                                       );
                                     });
                               },
+                              loading: () => CircularProgressIndicator(),
                               orElse: () {
                                 print('OrElse');
                               },
